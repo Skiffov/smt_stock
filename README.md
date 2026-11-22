@@ -45,6 +45,8 @@ python app.py
 
 ```fish
 python test_logic.py
+python test_unit.py
+python test_integration.py
 ```
 
 Тести використовують тимчасову БД і відмовляються стартувати, якщо поруч уже існує файл `smt_stock.sqlite3`, щоб не чіпати робочі дані. Для запуску тестів використовуйте чисту копію без БД.
