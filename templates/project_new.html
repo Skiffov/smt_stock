@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% block content %}
+<h1>{{ 'Редагування проєкту' if edit else 'Новий проєкт' }}</h1>
+<form method="post" class="card form-grid"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+<label>Назва проєкту *<input name="name" value="{{ project.name if edit else '' }}" required></label>
+<label>Серійний номер *<input name="serial" value="{{ project.serial if edit else '' }}" required></label>
+<label>Клас виробу за IPC-A-610 *<select name="ipc_class" required><option value="">Оберіть</option>{% for level in [1,2,3] %}<option value="{{ level }}" {% if edit and project.ipc_class==level %}selected{% endif %}>Class {{ level }}</option>{% endfor %}</select></label>
+<label>Відповідальний KIT-оператор *<select name="operator_id" required>{% for u in operators %}<option value="{{ u.id }}" {% if edit and project.operator_id==u.id %}selected{% endif %}>{{ u.name }}</option>{% endfor %}</select></label>
+<label class="full">Примітки<textarea name="notes">{{ project.notes if edit else '' }}</textarea></label>
+<label class="full">Критична інформація<textarea name="critical_info" placeholder="Особливі вимоги, ризики, застереження...">{{ project.critical_info if edit else '' }}</textarea></label>
+<div class="full"><h2>Специфікація компонентів (BOM)</h2><p class="muted">Виберіть існуючий компонент або створіть новий. Нові компоненти отримують нульовий залишок. Виробника і MPN вносить комірник при прийманні упаковки.</p>
+<div id="bom">{% for item in (current_bom if edit else [none]) %}<div class="bom-row"><div><select name="component_id[]"><option value="">Вибрати наявний компонент…</option>{% for c in components %}<option value="{{ c.id }}" {% if item and item.component_id==c.id %}selected{% endif %}>{{ c.code }} — {{ c.name }}</option>{% endfor %}</select><input name="new_code[]" placeholder="Новий артикул (якщо створюєте)"><input name="component_type[]" placeholder="Тип (RES, CAP, IC…)" aria-label="Тип компонента"><input name="case_size[]" placeholder="Типорозмір (0201, 0603…)" aria-label="Типорозмір"><input name="nominal[]" placeholder="Номінал (100 Ω, 100 нФ…)" aria-label="Номінал"><input name="specification[]" placeholder="Специфікація (допуск, напруга…)" aria-label="Додаткова специфікація"></div><div><input name="required_qty[]" type="number" min="1" placeholder="Потрібна кількість" value="{{ item.required_qty if item else '' }}" required><button type="button" class="secondary" onclick="removeBom(this)">Прибрати</button></div></div>{% endfor %}</div>
+<button type="button" class="secondary" onclick="addBom()">Додати рядок</button></div>
+<div class="full"><button>{{ 'Зберегти зміни' if edit else 'Створити проєкт' }}</button> <a class="button secondary" href="{{ url_for('project_detail',pid=project.id) if edit else url_for('projects') }}">Скасувати</a></div></form>
+<script>
+function addBom(){const box=document.getElementById('bom'),row=box.querySelector('.bom-row').cloneNode(true);row.querySelectorAll('input').forEach(x=>x.value='');row.querySelector('select').value='';box.appendChild(row)}
+function removeBom(btn){const box=document.getElementById('bom');if(box.children.length>1)btn.closest('.bom-row').remove();else alert('Потрібна щонайменше одна позиція BOM.')}
+</script>{% endblock %}

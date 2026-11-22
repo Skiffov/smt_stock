@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block content %}
+<div class="heading"><div><div class="eyebrow">НОМЕНКЛАТУРА / УПАКОВКИ</div><h1>{{ comp.code }} — {{ comp.name }}</h1>
+<p class="muted">{{ comp.specification or 'Додаткову специфікацію не задано' }}</p></div></div>
+<section class="card"><h2>Фізичні упаковки</h2><p class="muted">Виробник та MPN зберігаються окремо для кожної упаковки. Ідентичний номінал не гарантує автоматичної взаємозамінності.</p>
+<div class="table-wrap"><table><tr><th>Мітка</th><th>Виробник</th><th>MPN</th><th>Тип</th><th>Кількість</th><th>Місце</th><th>Стан</th></tr>
+{% for x in packages %}<tr><td>{{ x.label }}</td><td>{{ x.manufacturer }}</td><td>{{ x.mpn }}</td><td>{{ x.package_type }}</td><td>{{ x.quantity }} шт.</td><td>{{ x.location }}</td><td>{{ x.packaging_status }}{% if x.block_reason %}<small class="muted"> — {{ x.block_reason }}</small>{% endif %}</td></tr>
+{% else %}<tr><td colspan="7">Для компонента ще немає оприбуткованих упаковок.</td></tr>{% endfor %}</table></div></section>
+<a href="{{ url_for('components') }}">← Назад до каталогу</a>
+{% endblock %}

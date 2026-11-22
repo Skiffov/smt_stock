@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Новий компонент</h1><form method="post" class="card form-grid"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+<label>Внутрішній артикул *<input name="code" required placeholder="RES0201-100R-1P"></label>
+<label>Тип компонента *<input name="component_type" required placeholder="RES / CAP / IC / DIODE"></label>
+<label>Типорозмір *<input name="case_size" required placeholder="0201"></label>
+<label>Номінал *<input name="nominal" required placeholder="100 Ω"></label>
+<label class="full">Специфікація<input name="specification" placeholder="±1%, 0.05 W; робоча напруга та інші вимоги"></label>
+<label class="full">Примітки<textarea name="notes"></textarea></label>
+<p class="muted full">Назва формується з типу, типорозміру й номіналу. Виробник та MPN вводяться для кожної фізичної упаковки при надходженні. Одиниця обліку — штуки.</p>
+<div class="full"><button>Створити компонент</button></div></form>{% endblock %}

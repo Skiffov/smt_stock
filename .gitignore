@@ -1,0 +1,8 @@
+printf '%s\n' \
+'.venv/' \
+'__pycache__/' \
+'*.pyc' \
+'*.sqlite3' \
+'*.db' \
+'.pytest_cache/' \
+> .gitignore
